@@ -56,12 +56,26 @@ Resultados de tradução disponíveis
 
 banking-app/
 │
-├── main.py # Application entry point
-├── models/ # Main classes (User, Account, etc.)
-├── services/ # Business rules
-├── utils/ # Auxiliary functions (e.g., exchange)
-├── database/ # Database files
-├── data/ # Data files or examples
-├── README.md # This file
-└── requirements.txt # Dependencies (if used)
+├── main.py                  # Ponto de entrada da aplicação
+├── models/                  # Classes principais (User, Account, etc.)
+│   ├── user.py
+│   └── account.py
+│
+├── services/                # Regras de negócio (transferência, empréstimo, etc.)
+│   ├── transfer_service.py
+│   ├── loan_service.py
+│   └── notification_service.py
+│
+├── utils/                   # Funções auxiliares (como conversão de moedas)
+│   └── currency_api.py
+│
+├── database/                # Gerenciamento do banco de dados
+│   └── db_manager.py
+│
+├── data/                    # Arquivos de exemplo ou base local
+│   └── db.sqlite
+│
+├── README.md                # Documentação do projeto
+├── LICENSE                  # Licença de uso
+└── requirements.txt         # Dependências do projeto
 
