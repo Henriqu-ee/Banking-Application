@@ -29,7 +29,6 @@ A complete banking system developed in Python with support for multiple features
 ## Prerequisites
 
 - Python 3.8 or higher
-- Git installed (optional, to clone the project)
 
 ---
 
@@ -52,4 +51,17 @@ python main.py
 Enviar feedback
 Resultados de tradução disponíveis
 ```
+
+## Project Structure
+
+banking-app/
+│
+├── main.py # Application entry point
+├── models/ # Main classes (User, Account, etc.)
+├── services/ # Business rules
+├── utils/ # Auxiliary functions (e.g., exchange)
+├── database/ # Database files
+├── data/ # Data files or examples
+├── README.md # This file
+└── requirements.txt # Dependencies (if used)
 
