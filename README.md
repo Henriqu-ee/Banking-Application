@@ -52,32 +52,30 @@ Enviar feedback
 Resultados de tradução disponíveis
 ```
 
-## Estrutura do projeto
+## 📁 Project Structure
 
 ```bash
 banking-app/
 │
-├── main.py                  # Ponto de entrada da aplicação
-├── models/                  # Classes principais (User, Account, etc.)
-│   ├── user.py
-│   └── account.py
+├── main.py # Application entry point
+├── models/ # Main classes (User, Account, etc.)
+│ ├── user.py
+│ └── account.py
 │
-├── services/                # Regras de negócio (transferência, empréstimo, etc.)
-│   ├── transfer_service.py
-│   ├── loan_service.py
-│   └── notification_service.py
+├── services/ # Business rules (transfer, loan, etc.)
+│ ├── transfer_service.py
+│ ├── loan_service.py
+│ └── notification_service.py
 │
-├── utils/                   # Funções auxiliares (como conversão de moedas)
-│   └── currency_api.py
+├── utils/ # Helper functions (such as currency conversion)
+│ └── currency_api.py
 │
-├── database/                # Gerenciamento do banco de dados
-│   └── db_manager.py
+├── database/ # Database management
+│ └── db_manager.py
 │
-├── data/                    # Arquivos de exemplo ou base local
-│   └── db.sqlite
+├── data/ # Sample files or local database
+│ └── db.sqlite
 │
-├── README.md                # Documentação do projeto
-├── LICENSE                  # Licença de uso
-└── requirements.txt         # Dependências do projeto
-
-
+├── README.md # Project documentation
+├── LICENSE # Usage license
+└── requirements.txt # Project dependencies
