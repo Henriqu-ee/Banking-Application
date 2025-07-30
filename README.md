@@ -52,8 +52,9 @@ Enviar feedback
 Resultados de tradução disponíveis
 ```
 
-## Project Structure
+## Estrutura do projeto
 
+```bash
 banking-app/
 │
 ├── main.py                  # Ponto de entrada da aplicação
@@ -78,4 +79,5 @@ banking-app/
 ├── README.md                # Documentação do projeto
 ├── LICENSE                  # Licença de uso
 └── requirements.txt         # Dependências do projeto
+
 
