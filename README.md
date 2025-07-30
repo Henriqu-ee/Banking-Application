@@ -52,7 +52,7 @@ Enviar feedback
 Resultados de tradução disponíveis
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```bash
 banking-app/
