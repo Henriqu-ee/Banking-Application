@@ -79,3 +79,15 @@ banking-app/
 ├── README.md # Project documentation
 ├── LICENSE # Usage license
 └── requirements.txt # Project dependencies
+```
+
+## Technologies used
+
+- [x] Python 3.x
+
+- [x] SQLite (or other relational database)
+
+- [x] (Optional) Flask or Tkinter, if available
+
+- [x] Exchange API (simulated or real)
+
