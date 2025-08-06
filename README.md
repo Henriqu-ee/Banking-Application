@@ -75,7 +75,7 @@ bank_app/
 ├── utils/
 │   └── currency_api.py
 │
-└── maic.py   ← arquivo principal
+└── main.py   ← arquivo principal
 ```
 
 ## Technologies used
