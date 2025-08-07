@@ -2,10 +2,14 @@ from database.db_manager import criar_tabelas, salvar_conta, carregar_conta
 from database.db_transaction_manager import salvar_transacao, criar_tabela_transacoes, deletar_transacoes
 from models.user import User
 from models.account import Conta
-from services.loan_service import solicitar_emprestimo, aplicar_poupanca
+from services.loan_service import aplicar_investimento, solicitar_emprestimo
 from services.transfer_service import transferir
 from services.notification_service import definir_alerta, verificar_alerta
 from services.currency_service import cambio 
+from services.payment_service import pagar_conta
+from services.checkbook_service import solicitar_talao
+from services.support_service import registrar_suporte, listar_mensagens
+
 
 criar_tabelas()
 
@@ -126,6 +130,99 @@ def limpar_historico():
     else:
         print("\nConta não encontrada.\n")
 
+def pagamento_de_conta():
+    acc_num = input("Número da conta: ")
+    conta = procurar_conta(acc_num)
+    if conta:
+        descricao = input("Descrição da conta (ex: Conta de luz): ")
+        valor = float(input("Valor a pagar: "))
+        if pagar_conta(conta, descricao, valor):
+            salvar_transacao(conta.num_conta, conta.historico[-1])
+            salvar_conta(conta)
+            print("\nPagamento realizado com sucesso!\n")
+            verificar_alerta(conta)
+        else:
+            print("\nSaldo insuficiente para pagar a conta.\n")
+    else:
+        print("\nConta não encontrada.\n")
+
+def solicitar_talao_cheques():
+    acc_num = input("Número da conta: ")
+    conta = procurar_conta(acc_num)
+    if conta:
+        try:
+            quantidade = int(input("Quantidade de talões a solicitar (R$15,00 cada): "))
+            if quantidade <= 0:
+                raise ValueError
+        except ValueError:
+            print("\nQuantidade inválida. Deve ser um número inteiro positivo.\n")
+            return
+        if solicitar_talao(conta, quantidade):
+            salvar_transacao(conta.num_conta, conta.historico[-1])
+            salvar_conta(conta)
+            print(f"\n{quantidade} talão(ões) solicitado(s) com sucesso!\n")
+            verificar_alerta(conta)
+        else:
+            salvar_transacao(conta.num_conta, conta.historico[-1])
+            salvar_conta(conta)
+            print("\nSaldo insuficiente para solicitar talão.\n")
+    else:
+        print("\nConta não encontrada.\n")
+
+def suporte_cliente():
+    acc_num = input("Número da conta: ")
+    conta = procurar_conta(acc_num)
+    if conta:
+        print("\n1 - Enviar nova mensagem")
+        print("2 - Ver mensagens anteriores")
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            mensagem = input("Descreva seu problema ou dúvida: ")
+            registrar_suporte(acc_num, mensagem)
+            print("\nMensagem enviada com sucesso. Um atendente entrará em contato.\n")
+        elif opcao == "2":
+            mensagens = listar_mensagens(acc_num)
+            if mensagens:
+                print("\n--- Histórico de Suporte ---")
+                for linha in mensagens:
+                    print(linha.strip())
+                print()
+            else:
+                print("\nNenhuma mensagem registrada.\n")
+        else:
+            print("\nOpção inválida.\n")
+    else:
+        print("\nConta não encontrada.\n")
+
+def aplicar_investimento_opcao():
+    conta = procurar_conta(input("Número da conta: "))
+    if conta:
+        print("\nEscolha o tipo de investimento:")
+        print("1 - Poupança (0,65% a.m.)")
+        print("2 - CDB (0,90% a.m.)")
+        print("3 - Tesouro Direto (0,75% a.m.)")
+        opcao = input("Digite o número da opção: ")
+
+        tipos = {"1": "poupanca", "2": "cdb", "3": "tesouro"}
+        tipo = tipos.get(opcao)
+
+        if tipo is None:
+            print("\nOpção inválida.\n")
+            return
+
+        valor = float(input("Valor a aplicar: "))
+        meses = int(input("Prazo em meses: "))
+        retorno = aplicar_investimento(conta, valor, meses, tipo)
+
+        if retorno:
+            salvar_transacao(conta.num_conta, conta.historico[-1])
+            salvar_conta(conta)
+            print(f"\nInvestimento realizado. Retorno estimado: R${retorno:.2f}\n")
+    else:
+        print("\nConta não encontrada.\n")
+
+
 def menu():
     while True:
         print("\\n----- Sistema Bancário Alagoas -----")
@@ -138,9 +235,14 @@ def menu():
         print("7 - Solicitar empréstimo")
         print("8 - Definir alerta de saldo")
         print("9 - Câmbio de moedas")
-        print("10 - Aplicar na poupança")
-        print("11 - Sair")
-        print("12 - Limpar histórico da conta")
+        print("10 - Aplicar em Poupança/Investimentos")
+        print("11 - Limpar histórico da conta")
+        print("12 - Pagar conta")
+        print("13 - Solicitar talão de cheques")
+        print("14 - Suporte ao Cliente")
+        print("15 - Sair")
+
+
 
         opcao = input("Escolha uma opção: ")
 
@@ -190,22 +292,18 @@ def menu():
             else:
                 print("\nConta não encontrada.\n")
         elif opcao == "10":
-            conta = procurar_conta(input("Número da conta: "))
-            if conta:
-                valor = float(input("Valor a aplicar: "))
-                meses = int(input("Quantidade de meses: "))
-                retorno = aplicar_poupanca(conta, valor, meses)
-                if retorno:
-                    salvar_transacao(conta.num_conta, conta.historico[-1])  # ⬅️ salva a transação
-                    salvar_conta(conta) 
-                    print(f"\nAplicação realizada. Retorno esperado: R${retorno:.2f}\n")
-            else:
-                print("\nConta não encontrada.\n")
+            aplicar_investimento_opcao()
         elif opcao == "11":
+            limpar_historico()
+        elif opcao == "12":
+            pagamento_de_conta()
+        elif opcao == "13":
+            solicitar_talao_cheques()
+        elif opcao == "14":
+            suporte_cliente()
+        elif opcao == "15":
             print("\nEncerrando o sistema. Obrigado!\n")
             break
-        elif opcao == "12":
-            limpar_historico()
         else:
             print("\nOpção inválida!\n")
 
