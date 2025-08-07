@@ -98,7 +98,7 @@ bank_app/
 
 ```bash
 cd bank_app
-``
+```
 
 ## 🔧 Possible Improvements
 
